@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: sunday-postgres
+    environment:
+      POSTGRES_USER: sunday
+      POSTGRES_PASSWORD: sunday123
+      POSTGRES_DB: sunday_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sunday-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U sunday" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sunday-backend
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: sunday
+      DB_PASSWORD: sunday123
+      DB_DATABASE: sunday_db
+      PORT: 3000
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - sunday-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: sunday-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - sunday-network
+    restart: unless-stopped
+
+networks:
+  sunday-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monday.com Clone - Project Board</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect width="24" height="24" rx="4" fill="#FF3D57"/>
+                        <path d="M7 8h10M7 12h10M7 16h6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="workspace-name">My Workspace</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-item active">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <rect width="6" height="6" rx="1"/>
+                            <rect x="10" width="6" height="6" rx="1"/>
+                            <rect y="10" width="6" height="6" rx="1"/>
+                            <rect x="10" y="10" width="6" height="6" rx="1"/>
+                        </svg>
+                        <span>Main Board</span>
+                    </div>
+                    <div class="nav-item">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M2 3h12a1 1 0 011 1v8a1 1 0 01-1 1H2a1 1 0 01-1-1V4a1 1 0 011-1zm0 2v6h12V5H2z"/>
+                        </svg>
+                        <span>Marketing Projects</span>
+                    </div>
+                    <div class="nav-item">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <circle cx="8" cy="4" r="3"/>
+                            <path d="M2 14a6 6 0 0112 0"/>
+                        </svg>
+                        <span>Team Tasks</span>
+                    </div>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">FAVORITES</div>
+                    <div class="nav-item">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 1l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"/>
+                        </svg>
+                        <span>Sprint Planning</span>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">JD</div>
+                    <div class="user-info">
+                        <div class="user-name">John Doe</div>
+                        <div class="user-status">Online</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="board-info">
+                    <h1 class="board-title">Main Board</h1>
+                    <div class="board-description">Project management and task tracking</div>
+                </div>
+                <div class="top-bar-actions">
+                    <div class="search-box">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <circle cx="7" cy="7" r="5" stroke="currentColor" fill="none" stroke-width="2"/>
+                            <path d="M11 11l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <input type="text" placeholder="Search">
+                    </div>
+                    <button class="btn-icon" title="Filter">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M3 4h14M5 8h10M7 12h6"/>
+                        </svg>
+                    </button>
+                    <button class="btn-icon" title="Sort">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M6 4v12M6 16l-3-3M6 16l3-3M14 16V4M14 4l-3 3M14 4l3 3"/>
+                        </svg>
+                    </button>
+                    <button class="btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 2v12M2 8h12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        New Item
+                    </button>
+                </div>
+            </header>
+
+            <!-- Board Content -->
+            <div class="board-container">
+                <div class="board-table">
+                    <!-- Table Header -->
+                    <div class="table-header">
+                        <div class="header-cell col-checkbox"></div>
+                        <div class="header-cell col-item">Item</div>
+                        <div class="header-cell col-person">Person</div>
+                        <div class="header-cell col-status">Status</div>
+                        <div class="header-cell col-date">Date</div>
+                        <div class="header-cell col-timeline">Timeline</div>
+                    </div>
+
+                    <!-- Group 1: To Do -->
+                    <div class="group" data-group="todo">
+                        <div class="group-header">
+                            <button class="group-toggle">
+                                <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                                    <path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                            <div class="group-color" style="background: #579BFC;"></div>
+                            <h3 class="group-title">To Do</h3>
+                            <span class="item-count">3 items</span>
+                        </div>
+                        
+                        <div class="group-items">
+                            <div class="item-row">
+                                <div class="cell col-checkbox">
+                                    <input type="checkbox" class="item-checkbox">
+                                </div>
+                                <div class="cell col-item">
+                                    <span class="item-name" contenteditable="true">Design homepage mockup</span>
+                                </div>
+                                <div class="cell col-person">
+                                    <div class="person-avatars">
+                                        <div class="avatar avatar-sm" style="background: #FF6B6B;">SA</div>
+                                    </div>
+                                </div>
+                                <div class="cell col-status">
+                                    <div class="status-badge status-working" data-status="working">
+                                        <span>Working on it</span>
+                                    </div>
+                                </div>
+                                <div class="cell col-date">
+                                    <span class="date-text">Nov 25</span>
+                                </div>
+                                <div class="cell col-timeline">
+                                    <div class="timeline-bar" style="width: 30%; background: #FDAB3D;"></div>
+                                </div>
+                            </div>
+
+                            <div class="item-row">
+                                <div class="cell col-checkbox">
+                                    <input type="checkbox" class="item-checkbox">
+                                </div>
+                                <div class="cell col-item">
+                                    <span class="item-name" contenteditable="true">Research competitor websites</span>
+                                </div>
+                                <div class="cell col-person">
+                                    <div class="person-avatars">
+                                        <div class="avatar avatar-sm" style="background: #4ECDC4;">MJ</div>
+                                    </div>
+                                </div>
+                                <div class="cell col-status">
+                                    <div class="status-badge status-todo" data-status="todo">
+                                        <span>Not started</span>
+                                    </div>
+                                </div>
+                                <div class="cell col-date">
+                                    <span class="date-text">Nov 26</span>
+                                </div>
+                                <div class="cell col-timeline">
+                                    <div class="timeline-bar" style="width: 10%; background: #C4C4C4;"></div>
+                                </div>
+                            </div>
+
+                            <div class="item-row">
+                                <div class="cell col-checkbox">
+                                    <input type="checkbox" class="item-checkbox">
+                                </div>
+                                <div class="cell col-item">
+                                    <span class="item-name" contenteditable="true">Create content strategy document</span>
+                                </div>
+                                <div class="cell col-person">
+                                    <div class="person-avatars">
+                                        <div class="avatar avatar-sm" style="background: #A78BFA;">LK</div>
+                                        <div class="avatar avatar-sm" style="background: #FB923C;">RT</div>
+                                    </div>
+                                </div>
+                                <div class="cell col-status">
+                                    <div class="status-badge status-working" data-status="working">
+                                        <span>Working on it</span>
+                                    </div>
+                                </div>
+                                <div class="cell col-date">
+                                    <span class="date-text">Nov 27</span>
+                                </div>
+                                <div class="cell col-timeline">
+                                    <div class="timeline-bar" style="width: 45%; background: #FDAB3D;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="add-item-btn">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                                <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Add item
+                        </button>
+                    </div>
+
+                    <!-- Group 2: In Progress -->
+                    <div class="group" data-group="in-progress">
+                        <div class="group-header">
+                            <button class="group-toggle">
+                                <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                                    <path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                            <div class="group-color" style="background: #FDAB3D;"></div>
+                            <h3 class="group-title">In Progress</h3>
+                            <span class="item-count">2 items</span>
+                        </div>
+                        
+                        <div class="group-items">
+                            <div class="item-row">
+                                <div class="cell col-checkbox">
+                                    <input type="checkbox" class="item-checkbox">
+                                </div>
+                                <div class="cell col-item">
+                                    <span class="item-name" contenteditable="true">Develop landing page components</span>
+                                </div>
+                                <div class="cell col-person">
+                                    <div class="person-avatars">
+                                        <div class="avatar avatar-sm" style="background: #60A5FA;">JD</div>
+                                    </div>
+                                </div>
+                                <div class="cell col-status">
+                                    <div class="status-badge status-working" data-status="working">
+                                        <span>Working on it</span>
+                                    </div>
+                                </div>
+                                <div class="cell col-date">
+                                    <span class="date-text">Nov 24</span>
+                                </div>
+                                <div class="cell col-timeline">
+                                    <div class="timeline-bar" style="width: 65%; background: #FDAB3D;"></div>
+                                </div>
+                            </div>
+
+                            <div class="item-row">
+                                <div class="cell col-checkbox">
+                                    <input type="checkbox" class="item-checkbox">
+                                </div>
+                                <div class="cell col-item">
+                                    <span class="item-name" contenteditable="true">Set up analytics tracking</span>
+                                </div>
+                                <div class="cell col-person">
+                                    <div class="person-avatars">
+                                        <div class="avatar avatar-sm" style="background: #34D399;">EM</div>
+                                    </div>
+                                </div>
+                                <div class="cell col-status">
+                                    <div class="status-badge status-stuck" data-status="stuck">
+                                        <span>Stuck</span>
+                                    </div>
+                                </div>
+                                <div class="cell col-date">
+                                    <span class="date-text">Nov 23</span>
+                                </div>
+                                <div class="cell col-timeline">
+                                    <div class="timeline-bar" style="width: 20%; background: #E2445C;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="add-item-btn">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                                <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Add item
+                        </button>
+                    </div>
+
+                    <!-- Group 3: Done -->
+                    <div class="group" data-group="done">
+                        <div class="group-header">
+                            <button class="group-toggle">
+                                <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                                    <path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                            <div class="group-color" style="background: #00C875;"></div>
+                            <h3 class="group-title">Done</h3>
+                            <span class="item-count">2 items</span>
+                        </div>
+                        
+                        <div class="group-items">
+                            <div class="item-row">
+                                <div class="cell col-checkbox">
+                                    <input type="checkbox" class="item-checkbox" checked>
+                                </div>
+                                <div class="cell col-item">
+                                    <span class="item-name completed" contenteditable="true">Initial project setup</span>
+                                </div>
+                                <div class="cell col-person">
+                                    <div class="person-avatars">
+                                        <div class="avatar avatar-sm" style="background: #60A5FA;">JD</div>
+                                    </div>
+                                </div>
+                                <div class="cell col-status">
+                                    <div class="status-badge status-done" data-status="done">
+                                        <span>Done</span>
+                                    </div>
+                                </div>
+                                <div class="cell col-date">
+                                    <span class="date-text">Nov 20</span>
+                                </div>
+                                <div class="cell col-timeline">
+                                    <div class="timeline-bar" style="width: 100%; background: #00C875;"></div>
+                                </div>
+                            </div>
+
+                            <div class="item-row">
+                                <div class="cell col-checkbox">
+                                    <input type="checkbox" class="item-checkbox" checked>
+                                </div>
+                                <div class="cell col-item">
+                                    <span class="item-name completed" contenteditable="true">Team kickoff meeting</span>
+                                </div>
+                                <div class="cell col-person">
+                                    <div class="person-avatars">
+                                        <div class="avatar avatar-sm" style="background: #FF6B6B;">SA</div>
+                                        <div class="avatar avatar-sm" style="background: #60A5FA;">JD</div>
+                                        <div class="avatar avatar-sm" style="background: #4ECDC4;">MJ</div>
+                                    </div>
+                                </div>
+                                <div class="cell col-status">
+                                    <div class="status-badge status-done" data-status="done">
+                                        <span>Done</span>
+                                    </div>
+                                </div>
+                                <div class="cell col-date">
+                                    <span class="date-text">Nov 18</span>
+                                </div>
+                                <div class="cell col-timeline">
+                                    <div class="timeline-bar" style="width: 100%; background: #00C875;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="add-item-btn">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                                <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Add item
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Status Dropdown (Hidden by default) -->
+    <div class="status-dropdown" id="statusDropdown" style="display: none;">
+        <div class="dropdown-item" data-status="working">
+            <div class="status-badge status-working"><span>Working on it</span></div>
+        </div>
+        <div class="dropdown-item" data-status="stuck">
+            <div class="status-badge status-stuck"><span>Stuck</span></div>
+        </div>
+        <div class="dropdown-item" data-status="done">
+            <div class="status-badge status-done"><span>Done</span></div>
+        </div>
+        <div class="dropdown-item" data-status="todo">
+            <div class="status-badge status-todo"><span>Not started</span></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
