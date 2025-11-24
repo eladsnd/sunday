@@ -8,14 +8,68 @@ import {
     PointerSensor,
     useSensor,
     useSensors,
+    useDroppable,
 } from '@dnd-kit/core';
 import { useState } from 'react';
-import type { Board, Item } from '../types/board.types';
+import type { Board, Item, Group } from '../types/board.types';
 import TableRow from './TableRow';
 import { itemsApi } from '../api/boardsApi';
 
 interface BoardTableProps {
     board: Board;
+}
+
+interface GroupHeaderProps {
+    group: Group & { items: Item[] };
+    columnsCount: number;
+    activeItem: Item | null;
+}
+
+function GroupHeader({ group, columnsCount, activeItem }: GroupHeaderProps) {
+    const { setNodeRef, isOver } = useDroppable({
+        id: group.id,
+    });
+
+    return (
+        <tr ref={setNodeRef} data-group-id={group.id}>
+            <td
+                colSpan={columnsCount + 1}
+                className="group-header"
+                style={{
+                    position: 'relative',
+                    backgroundColor:
+                        isOver || (activeItem && activeItem.groupId !== group.id)
+                            ? 'rgba(108, 99, 255, 0.15)'
+                            : undefined,
+                    transition: 'background-color 200ms',
+                    border: isOver ? '2px solid var(--color-primary)' : undefined,
+                }}
+            >
+                <div className="group-header-content">
+                    <div
+                        className="group-color-indicator"
+                        style={{ backgroundColor: group.color }}
+                    />
+                    <span>{group.name}</span>
+                    <span className="text-muted" style={{ marginLeft: 'auto' }}>
+                        {group.items.length} items
+                    </span>
+                    {activeItem && activeItem.groupId !== group.id && (
+                        <span
+                            style={{
+                                marginLeft: '1rem',
+                                fontSize: '0.75rem',
+                                color: 'var(--color-primary)',
+                                fontWeight: 600,
+                            }}
+                        >
+                            {isOver ? '👆 Release to drop here' : '⬇ Drop here to move'}
+                        </span>
+                    )}
+                </div>
+            </td>
+        </tr>
+    );
 }
 
 function BoardTable({ board }: BoardTableProps) {
@@ -74,6 +128,8 @@ function BoardTable({ board }: BoardTableProps) {
         // New position is at the end of the target group
         const newPosition = targetGroup.items.length;
 
+        console.log('Moving item:', draggedItem.name, 'to group:', targetGroup.name, 'at position:', newPosition);
+
         // Update the item's group and position
         updatePositionMutation.mutate({
             itemId,
@@ -106,43 +162,12 @@ function BoardTable({ board }: BoardTableProps) {
                     <tbody>
                         {groupedItems.map((group) => (
                             <>
-                                <tr key={`group-${group.id}`} data-group-id={group.id}>
-                                    <td
-                                        colSpan={board.columns.length + 1}
-                                        className="group-header"
-                                        id={group.id}
-                                        style={{
-                                            position: 'relative',
-                                            backgroundColor:
-                                                activeItem && activeItem.groupId !== group.id
-                                                    ? 'rgba(108, 99, 255, 0.1)'
-                                                    : undefined,
-                                            transition: 'background-color 200ms',
-                                        }}
-                                    >
-                                        <div className="group-header-content">
-                                            <div
-                                                className="group-color-indicator"
-                                                style={{ backgroundColor: group.color }}
-                                            />
-                                            <span>{group.name}</span>
-                                            <span className="text-muted" style={{ marginLeft: 'auto' }}>
-                                                {group.items.length} items
-                                            </span>
-                                            {activeItem && activeItem.groupId !== group.id && (
-                                                <span
-                                                    style={{
-                                                        marginLeft: '1rem',
-                                                        fontSize: '0.75rem',
-                                                        color: 'var(--color-primary)',
-                                                    }}
-                                                >
-                                                    Drop here to move
-                                                </span>
-                                            )}
-                                        </div>
-                                    </td>
-                                </tr>
+                                <GroupHeader
+                                    key={`group-header-${group.id}`}
+                                    group={group}
+                                    columnsCount={board.columns.length}
+                                    activeItem={activeItem}
+                                />
                                 {group.items.map((item) => (
                                     <TableRow
                                         key={item.id}
@@ -172,15 +197,17 @@ function BoardTable({ board }: BoardTableProps) {
                 {activeItem ? (
                     <div
                         style={{
-                            opacity: 0.8,
+                            opacity: 0.9,
                             backgroundColor: 'var(--color-bg-elevated)',
-                            padding: '0.5rem 1rem',
+                            padding: '0.75rem 1.5rem',
                             borderRadius: 'var(--radius-md)',
                             boxShadow: 'var(--shadow-xl)',
                             border: '2px solid var(--color-primary)',
+                            fontSize: '0.95rem',
+                            fontWeight: 600,
                         }}
                     >
-                        {activeItem.name}
+                        📌 {activeItem.name}
                     </div>
                 ) : null}
             </DragOverlay>
