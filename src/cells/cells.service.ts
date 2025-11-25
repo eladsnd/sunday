@@ -2,13 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CellValue } from '../entities/cell-value.entity';
+import { Item } from '../entities/item.entity';
 import { UpdateCellValueDto } from './dto/update-cell-value.dto';
+import { AutomationsService } from '../automations/automations.service';
 
 @Injectable()
 export class CellsService {
     constructor(
         @InjectRepository(CellValue)
         private cellValueRepository: Repository<CellValue>,
+        private automationsService: AutomationsService,
     ) { }
 
     async updateCellValue(
@@ -31,6 +34,29 @@ export class CellsService {
             });
         }
 
-        return this.cellValueRepository.save(cellValue);
+        const savedCellValue = await this.cellValueRepository.save(cellValue);
+
+        // Trigger automations
+        // Fetch item to get boardId
+        // We use the manager to avoid injecting ItemsRepository directly to avoid circular deps if possible,
+        // but since we are in a service, we can just use the query builder or manager.
+        const item = await this.cellValueRepository.manager.findOne(Item, {
+            where: { id: itemId },
+            relations: ['group'],
+        });
+
+        if (item && item.group) {
+            await this.automationsService.checkAndExecuteAutomations(
+                item.group.boardId,
+                'status_change',
+                {
+                    columnId,
+                    value: updateCellValueDto.value,
+                    itemId,
+                }
+            );
+        }
+
+        return savedCellValue;
     }
 }

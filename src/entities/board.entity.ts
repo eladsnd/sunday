@@ -9,6 +9,7 @@ import {
 import { Group } from './group.entity';
 import { BoardColumn } from './column.entity';
 import { Item } from './item.entity';
+import { Automation } from './automation.entity';
 
 @Entity('boards')
 export class Board {
@@ -35,4 +36,7 @@ export class Board {
 
     @OneToMany(() => Item, (item) => item.board, { cascade: true })
     items: Item[];
+
+    @OneToMany(() => Automation, (automation) => automation.board, { cascade: true })
+    automations: Automation[];
 }

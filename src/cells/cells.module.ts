@@ -3,11 +3,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CellsController } from './cells.controller';
 import { CellsService } from './cells.service';
 import { CellValue } from '../entities/cell-value.entity';
-import { Item } from '../entities/item.entity';
-import { BoardColumn } from '../entities/column.entity';
+import { AutomationsModule } from '../automations/automations.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([CellValue, Item, BoardColumn])],
+    imports: [
+        TypeOrmModule.forFeature([CellValue]),
+        AutomationsModule,
+    ],
     controllers: [CellsController],
     providers: [CellsService],
     exports: [CellsService],

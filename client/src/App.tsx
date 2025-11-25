@@ -43,7 +43,7 @@ function App() {
                         <h1>Sunday</h1>
                     </div>
                     <div className="app-logo">
-                        <span className="text-muted">Job Search Tracker</span>
+                        <span className="text-muted">Work OS</span>
                     </div>
                 </div>
             </header>

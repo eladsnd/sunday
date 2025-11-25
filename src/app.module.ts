@@ -4,11 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BoardsModule } from './boards/boards.module';
 import { ItemsModule } from './items/items.module';
 import { CellsModule } from './cells/cells.module';
+import { GroupsModule } from './groups/groups.module';
+import { AutomationsModule } from './automations/automations.module';
 import { Board } from './entities/board.entity';
 import { Group } from './entities/group.entity';
 import { Item } from './entities/item.entity';
 import { BoardColumn } from './entities/column.entity';
 import { CellValue } from './entities/cell-value.entity';
+import { Automation } from './entities/automation.entity';
 
 @Module({
     imports: [
@@ -22,13 +25,15 @@ import { CellValue } from './entities/cell-value.entity';
             username: process.env.DB_USERNAME || 'sunday',
             password: process.env.DB_PASSWORD || 'sunday123',
             database: process.env.DB_DATABASE || 'sunday_db',
-            entities: [Board, Group, Item, BoardColumn, CellValue],
+            entities: [Board, Group, Item, BoardColumn, CellValue, Automation],
             synchronize: process.env.NODE_ENV !== 'production', // Auto-sync in dev only
             logging: process.env.NODE_ENV === 'development',
         }),
         BoardsModule,
         ItemsModule,
         CellsModule,
+        GroupsModule,
+        AutomationsModule,
     ],
 })
 export class AppModule { }

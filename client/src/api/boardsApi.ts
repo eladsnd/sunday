@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Board } from '../types/board.types';
+import type { Board, Group } from '../types/board.types';
 
 const api = axios.create({
     baseURL: '/api',
@@ -40,4 +40,24 @@ export const itemsApi = {
 export const cellsApi = {
     updateValue: (itemId: string, columnId: string, value: any) =>
         api.patch(`/cells/${itemId}/${columnId}`, { value }),
+};
+
+export const groupsApi = {
+    updatePosition: (id: string, data: { position: number }) =>
+        api.patch<Group>(`/groups/${id}/position`, data).then((res) => res.data),
+};
+
+export const automationsApi = {
+    create: (data: {
+        boardId: string;
+        triggerType: string;
+        triggerConfig: any;
+        actionType: string;
+        actionConfig: any;
+    }) => api.post('/automations', data).then((res) => res.data),
+
+    getAll: (boardId: string) =>
+        api.get(`/automations?boardId=${boardId}`).then((res) => res.data),
+
+    delete: (id: string) => api.delete(`/automations/${id}`).then((res) => res.data),
 };
