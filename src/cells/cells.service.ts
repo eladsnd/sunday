@@ -19,6 +19,11 @@ export class CellsService {
         columnId: string,
         updateCellValueDto: UpdateCellValueDto,
     ): Promise<CellValue> {
+        console.log('=== updateCellValue called ===');
+        console.log('itemId:', itemId);
+        console.log('columnId:', columnId);
+        console.log('updateCellValueDto:', JSON.stringify(updateCellValueDto));
+
         // Find existing cell value or create new one
         let cellValue = await this.cellValueRepository.findOne({
             where: { itemId, columnId },
@@ -35,23 +40,32 @@ export class CellsService {
         }
 
         const savedCellValue = await this.cellValueRepository.save(cellValue);
+        console.log('Cell value saved:', JSON.stringify(savedCellValue));
 
         // Trigger automations
         // Fetch item to get boardId
-        // We use the manager to avoid injecting ItemsRepository directly to avoid circular deps if possible,
-        // but since we are in a service, we can just use the query builder or manager.
         const item = await this.cellValueRepository.manager.findOne(Item, {
             where: { id: itemId },
             relations: ['group'],
         });
 
+        console.log('Item found:', item ? 'YES' : 'NO');
+        console.log('Item has group:', item?.group ? 'YES' : 'NO');
+
         if (item && item.group) {
+            // Extract the actual value from the cell value object
+            // Cell values are stored as { text: "value" } for most types
+            const actualValue = updateCellValueDto.value?.text || updateCellValueDto.value;
+
+            console.log(`Checking automations for item ${itemId}, column ${columnId}, value:`, actualValue);
+            console.log('Board ID:', item.group.boardId);
+
             await this.automationsService.checkAndExecuteAutomations(
                 item.group.boardId,
                 'status_change',
                 {
                     columnId,
-                    value: updateCellValueDto.value,
+                    value: actualValue,
                     itemId,
                 }
             );

@@ -29,13 +29,30 @@ export class AutomationsService {
     }
 
     async checkAndExecuteAutomations(boardId: string, triggerType: string, context: any) {
+        console.log('=== checkAndExecuteAutomations called ===');
+        console.log('boardId:', boardId);
+        console.log('triggerType:', triggerType);
+        console.log('context:', JSON.stringify(context));
+
         const automations = await this.automationsRepository.find({
             where: { boardId, triggerType },
         });
 
+        console.log(`Found ${automations.length} automations for this board and trigger type`);
+        automations.forEach((auto, idx) => {
+            console.log(`Automation ${idx}:`, JSON.stringify({
+                id: auto.id,
+                triggerConfig: auto.triggerConfig,
+                actionConfig: auto.actionConfig
+            }));
+        });
+
         for (const automation of automations) {
             if (this.matchesTrigger(automation, context)) {
+                console.log('✓ Automation matched! Executing action...');
                 await this.executeAction(automation, context);
+            } else {
+                console.log('✗ Automation did not match');
             }
         }
     }
@@ -43,9 +60,17 @@ export class AutomationsService {
     private matchesTrigger(automation: Automation, context: any): boolean {
         if (automation.triggerType === 'status_change') {
             const { columnId, value } = automation.triggerConfig;
-            // Check if the changed column matches the automation's column
-            // AND if the new value matches the automation's value
-            return context.columnId === columnId && context.value === value;
+            const matches = context.columnId === columnId && context.value === value;
+
+            console.log(`Checking automation trigger:`, {
+                automationColumnId: columnId,
+                automationValue: value,
+                contextColumnId: context.columnId,
+                contextValue: context.value,
+                matches
+            });
+
+            return matches;
         }
         return false;
     }
