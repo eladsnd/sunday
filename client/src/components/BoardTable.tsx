@@ -23,7 +23,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
 import type { Board, Item, Group } from '../types/board.types';
 import TableRow from './TableRow';
-import { itemsApi, groupsApi } from '../api/boardsApi';
+import { itemsApi, groupsApi, columnsApi } from '../api/boardsApi';
 
 interface BoardTableProps {
     board: Board;
@@ -70,7 +70,7 @@ function GroupHeader({ group, columnsCount, activeItem, onDelete }: GroupHeaderP
         <tr ref={setNodeRef} style={style} {...attributes}>
             <td
                 ref={setDropRef}
-                colSpan={columnsCount + 1}
+                colSpan={columnsCount + 2}
                 className="group-header"
                 style={{
                     position: 'relative',
@@ -177,6 +177,13 @@ function BoardTable({ board }: BoardTableProps) {
     const updateGroupPositionMutation = useMutation({
         mutationFn: ({ groupId, position }: { groupId: string; position: number }) =>
             groupsApi.updatePosition(groupId, { position }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['board', board.id] });
+        },
+    });
+
+    const deleteColumnMutation = useMutation({
+        mutationFn: (columnId: string) => columnsApi.delete(columnId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['board', board.id] });
         },
@@ -296,9 +303,62 @@ function BoardTable({ board }: BoardTableProps) {
                                 .sort((a, b) => a.position - b.position)
                                 .map((column) => (
                                     <th key={column.id} style={{ minWidth: '150px' }}>
-                                        {column.label}
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                                            <span>{column.label}</span>
+                                            <button
+                                                onClick={() => {
+                                                    if (confirm(`Delete column "${column.label}"?`)) {
+                                                        deleteColumnMutation.mutate(column.id);
+                                                    }
+                                                }}
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    cursor: 'pointer',
+                                                    color: 'var(--color-text-tertiary)',
+                                                    fontSize: '1.2rem',
+                                                    padding: '0 0.25rem',
+                                                    opacity: 0.6,
+                                                    transition: 'opacity 0.2s',
+                                                }}
+                                                onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+                                                onMouseLeave={(e) => e.currentTarget.style.opacity = '0.6'}
+                                                title="Delete Column"
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
                                     </th>
                                 ))}
+                            <th style={{ minWidth: '120px' }}>
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() => {
+                                        const label = prompt('Enter column name:');
+                                        if (label) {
+                                            const type = prompt(
+                                                'Enter column type:\n' +
+                                                '- text (default)\n' +
+                                                '- status\n' +
+                                                '- date\n' +
+                                                '- priority\n' +
+                                                '- link\n' +
+                                                '- number\n' +
+                                                '- person\n' +
+                                                '- timeline\n' +
+                                                '- files',
+                                                'text'
+                                            ) || 'text';
+                                            columnsApi.create({ boardId: board.id, label, type }).then(() => {
+                                                queryClient.invalidateQueries({ queryKey: ['board', board.id] });
+                                            });
+                                        }
+                                    }}
+                                    style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                                >
+                                    + Add Column
+                                </button>
+                            </th>
                         </tr>
                     </thead>
                     <SortableContext
@@ -333,7 +393,7 @@ function BoardTable({ board }: BoardTableProps) {
                                     {group.items.length === 0 && !activeItem && (
                                         <tr>
                                             <td
-                                                colSpan={board.columns.length + 1}
+                                                colSpan={board.columns.length + 2}
                                                 style={{ textAlign: 'center', padding: '2rem' }}
                                             >
                                                 <span className="text-muted">No items in this group</span>

@@ -6,6 +6,7 @@ import { ItemsModule } from './items/items.module';
 import { CellsModule } from './cells/cells.module';
 import { GroupsModule } from './groups/groups.module';
 import { AutomationsModule } from './automations/automations.module';
+import { ColumnsModule } from './columns/columns.module';
 import { Board } from './entities/board.entity';
 import { Group } from './entities/group.entity';
 import { Item } from './entities/item.entity';
@@ -34,6 +35,7 @@ import { Automation } from './entities/automation.entity';
         CellsModule,
         GroupsModule,
         AutomationsModule,
+        ColumnsModule,
     ],
 })
 export class AppModule { }

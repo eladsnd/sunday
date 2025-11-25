@@ -272,11 +272,13 @@ body {
     background: var(--color-bg-elevated);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: visible;
 }
 
 .board-table {
-    width: 100%;
+    width: max-content;
+    min-width: 100%;
     border-collapse: separate;
     border-spacing: 0;
 }

@@ -52,6 +52,15 @@ export const groupsApi = {
         api.patch<Group>(`/groups/${id}/position`, data).then((res) => res.data),
 };
 
+export const columnsApi = {
+    create: (data: { boardId: string; label: string; type: string }) =>
+        api.post('/columns', data).then((res) => res.data),
+
+    delete: (id: string) => api.delete(`/columns/${id}`),
+
+    update: (id: string, data: any) => api.patch(`/columns/${id}`, data),
+};
+
 export const automationsApi = {
     create: (data: {
         boardId: string;
