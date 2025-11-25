@@ -15,6 +15,7 @@ describe('ItemsService', () => {
         create: jest.fn(),
         save: jest.fn(),
         remove: jest.fn(),
+        createQueryBuilder: jest.fn(),
         manager: {
             transaction: jest.fn(),
         },
@@ -42,12 +43,58 @@ describe('ItemsService', () => {
     });
 
     describe('create', () => {
-        it('should create an item', async () => {
+        it('should create an item with calculated position', async () => {
             const createDto = {
                 name: 'Test Item',
                 groupId: 'group-1',
                 boardId: 'board-1',
             };
+
+            const mockQueryBuilder = {
+                select: jest.fn().mockReturnThis(),
+                where: jest.fn().mockReturnThis(),
+                getRawOne: jest.fn().mockResolvedValue({ max: 2 }),
+            };
+
+            mockItemRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+
+            const savedItem = {
+                id: 'item-1',
+                ...createDto,
+                position: 3,
+                createdAt: new Date(),
+            };
+
+            mockItemRepository.create.mockReturnValue(savedItem);
+            mockItemRepository.save.mockResolvedValue(savedItem);
+
+            const result = await service.create(createDto);
+
+            expect(mockItemRepository.createQueryBuilder).toHaveBeenCalledWith('item');
+            expect(mockQueryBuilder.select).toHaveBeenCalledWith('MAX(item.position)', 'max');
+            expect(mockQueryBuilder.where).toHaveBeenCalledWith('item.groupId = :groupId', { groupId: 'group-1' });
+            expect(mockItemRepository.create).toHaveBeenCalledWith({
+                ...createDto,
+                position: 3,
+            });
+            expect(mockItemRepository.save).toHaveBeenCalledWith(savedItem);
+            expect(result).toEqual(savedItem);
+        });
+
+        it('should create first item with position 0 when group is empty', async () => {
+            const createDto = {
+                name: 'First Item',
+                groupId: 'group-1',
+                boardId: 'board-1',
+            };
+
+            const mockQueryBuilder = {
+                select: jest.fn().mockReturnThis(),
+                where: jest.fn().mockReturnThis(),
+                getRawOne: jest.fn().mockResolvedValue({ max: null }),
+            };
+
+            mockItemRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
 
             const savedItem = {
                 id: 'item-1',
@@ -61,9 +108,11 @@ describe('ItemsService', () => {
 
             const result = await service.create(createDto);
 
-            expect(mockItemRepository.create).toHaveBeenCalledWith(createDto);
-            expect(mockItemRepository.save).toHaveBeenCalledWith(savedItem);
-            expect(result).toEqual(savedItem);
+            expect(mockItemRepository.create).toHaveBeenCalledWith({
+                ...createDto,
+                position: 0,
+            });
+            expect(result.position).toBe(0);
         });
     });
 

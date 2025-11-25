@@ -26,3 +26,11 @@ export const setupAxiosInterceptors = (token: string) => {
         return config;
     });
 };
+
+// Clear axios interceptor (remove JWT token)
+export const clearAxiosInterceptors = () => {
+    if (requestInterceptorId !== null) {
+        apiClient.interceptors.request.eject(requestInterceptorId);
+        requestInterceptorId = null;
+    }
+};

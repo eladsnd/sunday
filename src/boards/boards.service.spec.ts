@@ -95,6 +95,7 @@ describe('BoardsService', () => {
             const board = {
                 id: 'board-1',
                 name: 'Test Board',
+                ownerId: 'user-1',
                 groups: [],
                 columns: [],
                 items: [],
@@ -117,6 +118,23 @@ describe('BoardsService', () => {
 
             await expect(service.findOne('non-existent', 'user-1')).rejects.toThrow(
                 NotFoundException,
+            );
+        });
+
+        it('should throw ForbiddenException when user does not own the board', async () => {
+            const board = {
+                id: 'board-1',
+                name: 'Test Board',
+                ownerId: 'user-2',
+                groups: [],
+                columns: [],
+                items: [],
+            };
+
+            mockBoardRepository.findOne.mockResolvedValue(board);
+
+            await expect(service.findOne('board-1', 'user-1')).rejects.toThrow(
+                'You do not have permission to access this board',
             );
         });
     });
@@ -152,6 +170,7 @@ describe('BoardsService', () => {
                 id: 'board-1',
                 name: 'Old Name',
                 description: 'Old description',
+                ownerId: 'user-1',
                 groups: [],
                 columns: [],
                 items: [],
@@ -176,6 +195,7 @@ describe('BoardsService', () => {
             const board = {
                 id: 'board-1',
                 name: 'Test Board',
+                ownerId: 'user-1',
                 groups: [],
                 columns: [],
                 items: [],

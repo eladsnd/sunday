@@ -38,5 +38,5 @@ export const authApi = {
     },
 };
 
-// Export setupAxiosInterceptors from axios.config.ts
-export { setupAxiosInterceptors } from './axios.config';
+// Export axios interceptor functions from axios.config.ts
+export { setupAxiosInterceptors, clearAxiosInterceptors } from './axios.config';
