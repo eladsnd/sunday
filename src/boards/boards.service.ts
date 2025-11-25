@@ -68,8 +68,8 @@ export class BoardsService {
     async seedJobSearchBoard(): Promise<Board> {
         // Create board
         const board = this.boardRepository.create({
-            name: 'Job Search Tracker 2024',
-            description: 'Track all your job applications in one place',
+            name: 'Main Board',
+            description: 'Organize and track your work in one place',
         });
         await this.boardRepository.save(board);
 

@@ -3,6 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { boardsApi } from './api/boardsApi';
 import BoardView from './components/BoardView';
 import Sidebar from './components/Sidebar';
+import AgendaView from './components/AgendaView';
+import CalendarView from './components/CalendarView';
 
 function App() {
     const [boardId, setBoardId] = useState<string | null>(null);
@@ -40,7 +42,8 @@ function App() {
                         <header className="app-header" style={{ left: '240px', width: 'calc(100% - 240px)' }}>
                             <div className="app-header-content">
                                 <div className="app-logo">
-                                    <span className="text-muted">Work OS</span>
+                                    <div className="app-logo-icon">📋</div>
+                                    <h1>Sunday</h1>
                                 </div>
                             </div>
                         </header>
@@ -58,18 +61,12 @@ function App() {
                     </>
                 )}
 
-                {activeView === 'agenda' && (
-                    <div style={{ padding: '2rem', color: 'var(--color-text-primary)' }}>
-                        <h1>Agenda View</h1>
-                        <p className="text-muted">Coming soon...</p>
-                    </div>
+                {activeView === 'agenda' && boardId && (
+                    <AgendaView boardId={boardId} />
                 )}
 
-                {activeView === 'calendar' && (
-                    <div style={{ padding: '2rem', color: 'var(--color-text-primary)' }}>
-                        <h1>Calendar View</h1>
-                        <p className="text-muted">Coming soon...</p>
-                    </div>
+                {activeView === 'calendar' && boardId && (
+                    <CalendarView boardId={boardId} />
                 )}
             </div>
         </div>
