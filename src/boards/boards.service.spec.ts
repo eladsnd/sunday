@@ -83,7 +83,7 @@ describe('BoardsService', () => {
 
             mockBoardRepository.find.mockResolvedValue(boards);
 
-            const result = await service.findAll();
+            const result = await service.findAll('user-1');
 
             expect(mockBoardRepository.find).toHaveBeenCalled();
             expect(result).toEqual(boards);
@@ -102,7 +102,7 @@ describe('BoardsService', () => {
 
             mockBoardRepository.findOne.mockResolvedValue(board);
 
-            const result = await service.findOne('board-1');
+            const result = await service.findOne('board-1', 'user-1');
 
             expect(mockBoardRepository.findOne).toHaveBeenCalledWith({
                 where: { id: 'board-1' },
@@ -115,7 +115,7 @@ describe('BoardsService', () => {
         it('should throw NotFoundException when board not found', async () => {
             mockBoardRepository.findOne.mockResolvedValue(null);
 
-            await expect(service.findOne('non-existent')).rejects.toThrow(
+            await expect(service.findOne('non-existent', 'user-1')).rejects.toThrow(
                 NotFoundException,
             );
         });
@@ -138,9 +138,9 @@ describe('BoardsService', () => {
             mockBoardRepository.create.mockReturnValue(savedBoard);
             mockBoardRepository.save.mockResolvedValue(savedBoard);
 
-            const result = await service.create(createDto);
+            const result = await service.create(createDto, 'user-1');
 
-            expect(mockBoardRepository.create).toHaveBeenCalledWith(createDto);
+            expect(mockBoardRepository.create).toHaveBeenCalledWith({...createDto, ownerId: 'user-1'});
             expect(mockBoardRepository.save).toHaveBeenCalledWith(savedBoard);
             expect(result).toEqual(savedBoard);
         });
@@ -164,7 +164,7 @@ describe('BoardsService', () => {
             mockBoardRepository.findOne.mockResolvedValue(board);
             mockBoardRepository.save.mockResolvedValue({ ...board, ...updateDto });
 
-            const result = await service.update('board-1', updateDto);
+            const result = await service.update('board-1', updateDto, 'user-1');
 
             expect(result.name).toBe('New Name');
             expect(mockBoardRepository.save).toHaveBeenCalled();
@@ -184,7 +184,7 @@ describe('BoardsService', () => {
             mockBoardRepository.findOne.mockResolvedValue(board);
             mockBoardRepository.remove.mockResolvedValue(board);
 
-            await service.remove('board-1');
+            await service.remove('board-1', 'user-1');
 
             expect(mockBoardRepository.remove).toHaveBeenCalledWith(board);
         });
