@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useAuth } from './context/AuthContext';
 import { boardsApi } from './api/boardsApi';
 import BoardView from './components/BoardView';
 import Sidebar from './components/Sidebar';
@@ -7,6 +9,7 @@ import AgendaView from './components/AgendaView';
 import CalendarView from './components/CalendarView';
 
 function App() {
+    const { isAuthenticated, isLoading, user } = useAuth();
     const [boardId, setBoardId] = useState<string | null>(null);
     const [activeView, setActiveView] = useState<'board' | 'agenda' | 'calendar'>('board');
 
@@ -31,6 +34,19 @@ function App() {
             });
         }
     }, [boards]);
+
+    if (isLoading) {
+        return (
+            <div className="loading-container">
+                <div className="loading-spinner"></div>
+                <p className="text-muted">Loading...</p>
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
 
     return (
         <div className="app" style={{ display: 'flex' }}>
