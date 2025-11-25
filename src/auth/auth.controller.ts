@@ -4,7 +4,7 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -28,8 +28,8 @@ export class AuthController {
 
     @Get('google/callback')
     @UseGuards(GoogleAuthGuard)
-    async googleAuthRedirect(@Req() req, @Res() res: Response) {
-        const { accessToken, user } = req.user;
+    async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+        const { accessToken, user } = req.user as any;
 
         // Redirect to frontend with token
         const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
@@ -38,8 +38,8 @@ export class AuthController {
 
     @Get('profile')
     @UseGuards(JwtAuthGuard)
-    async getProfile(@Req() req) {
-        const user = await this.authService.findById(req.user.userId);
+    async getProfile(@Req() req: Request) {
+        const user = await this.authService.findById((req.user as any).userId);
         if (user) {
             const { password, googleAccessToken, googleRefreshToken, ...result } = user;
             return result;

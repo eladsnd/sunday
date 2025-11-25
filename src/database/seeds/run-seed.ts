@@ -17,7 +17,7 @@ async function runSeeds() {
         password: process.env.DB_PASSWORD || 'sunday123',
         database: process.env.DB_DATABASE || 'sunday_db',
         entities: [Board, Group, Item, BoardColumn, CellValue, Automation, User],
-        synchronize: false,
+        synchronize: true,
     });
 
     try {
