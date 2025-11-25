@@ -29,12 +29,16 @@ export class ItemsService {
         return this.itemRepository.save(item);
     }
 
-    async update(id: string, updateItemDto: UpdateItemDto): Promise<Item> {
+    async findOne(id: string): Promise<Item> {
         const item = await this.itemRepository.findOne({ where: { id } });
         if (!item) {
             throw new NotFoundException(`Item with ID ${id} not found`);
         }
+        return item;
+    }
 
+    async update(id: string, updateItemDto: UpdateItemDto): Promise<Item> {
+        const item = await this.findOne(id);
         Object.assign(item, updateItemDto);
         return this.itemRepository.save(item);
     }
@@ -43,10 +47,7 @@ export class ItemsService {
         id: string,
         updatePositionDto: UpdateItemPositionDto,
     ): Promise<Item> {
-        const item = await this.itemRepository.findOne({ where: { id } });
-        if (!item) {
-            throw new NotFoundException(`Item with ID ${id} not found`);
-        }
+        const item = await this.findOne(id);
 
         const { groupId, position } = updatePositionDto;
 
@@ -60,11 +61,7 @@ export class ItemsService {
     }
 
     async remove(id: string): Promise<void> {
-        const item = await this.itemRepository.findOne({ where: { id } });
-        if (!item) {
-            throw new NotFoundException(`Item with ID ${id} not found`);
-        }
-
+        const item = await this.findOne(id);
         await this.itemRepository.remove(item);
     }
 }

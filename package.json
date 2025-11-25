@@ -1,7 +1,7 @@
 {
   "name": "sunday-backend",
   "version": "1.0.0",
-  "description": "Sunday - Monday.com clone backend with NestJS",
+  "description": "Sunday - Work OS Backend",
   "author": "",
   "private": true,
   "license": "MIT",
@@ -16,7 +16,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "typeorm-ts-node-commonjs"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -54,6 +55,10 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   },
   "jest": {
     "moduleFileExtensions": [

@@ -1,0 +1,65 @@
+version: 2
+services:
+  # PostgreSQL Database
+  - type: pserv
+    name: sunday-postgres
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile.postgres
+    envVars:
+      - key: POSTGRES_USER
+        value: sunday
+      - key: POSTGRES_PASSWORD
+        generateValue: true
+      - key: POSTGRES_DB
+        value: sunday_db
+
+  # Backend API
+  - type: web
+    name: sunday-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/boards
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: DB_HOST
+        fromDatabase:
+          name: sunday-postgres
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: sunday-postgres
+          property: port
+      - key: DB_USERNAME
+        fromDatabase:
+          name: sunday-postgres
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: sunday-postgres
+          property: password
+      - key: DB_DATABASE
+        fromDatabase:
+          name: sunday-postgres
+          property: database
+      - key: CORS_ORIGIN
+        value: https://sunday-frontend.onrender.com
+
+  # Frontend
+  - type: web
+    name: sunday-frontend
+    env: static
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: ./client/dist
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://sunday-backend.onrender.com/api/*
+    envVars:
+      - key: VITE_API_URL
+        value: https://sunday-backend.onrender.com/api
