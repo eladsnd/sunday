@@ -33,9 +33,10 @@ interface GroupHeaderProps {
     group: Group & { items: Item[] };
     columnsCount: number;
     activeItem: Item | null;
+    onDelete: () => void;
 }
 
-function GroupHeader({ group, columnsCount, activeItem }: GroupHeaderProps) {
+function GroupHeader({ group, columnsCount, activeItem, onDelete }: GroupHeaderProps) {
     const {
         attributes,
         listeners,
@@ -101,6 +102,26 @@ function GroupHeader({ group, columnsCount, activeItem }: GroupHeaderProps) {
                         style={{ backgroundColor: group.color }}
                     />
                     <span>{group.name}</span>
+
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete();
+                        }}
+                        style={{
+                            marginLeft: '1rem',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            color: 'var(--color-text-tertiary)',
+                            fontSize: '1.2rem',
+                            padding: '0 0.5rem'
+                        }}
+                        title="Delete Group"
+                    >
+                        ×
+                    </button>
+
                     <span className="text-muted" style={{ marginLeft: 'auto' }}>
                         {group.items.length} items
                     </span>
@@ -248,6 +269,25 @@ function BoardTable({ board }: BoardTableProps) {
             onDragEnd={handleDragEnd}
         >
             <div className="board-table-wrapper">
+                <div style={{ padding: '1rem', display: 'flex', gap: '1rem' }}>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                            const name = prompt('Enter group name:');
+                            if (name) {
+                                groupsApi.create({
+                                    name,
+                                    boardId: board.id,
+                                    color: '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')
+                                }).then(() => {
+                                    queryClient.invalidateQueries({ queryKey: ['board', board.id] });
+                                });
+                            }
+                        }}
+                    >
+                        + Add New Group
+                    </button>
+                </div>
                 <table className="board-table">
                     <thead>
                         <tr>
@@ -273,6 +313,13 @@ function BoardTable({ board }: BoardTableProps) {
                                         group={group}
                                         columnsCount={board.columns.length}
                                         activeItem={activeItem}
+                                        onDelete={() => {
+                                            if (confirm(`Are you sure you want to delete group "${group.name}"?`)) {
+                                                groupsApi.delete(group.id).then(() => {
+                                                    queryClient.invalidateQueries({ queryKey: ['board', board.id] });
+                                                });
+                                            }
+                                        }}
                                     />
                                     {group.items.map((item) => (
                                         <TableRow
@@ -330,7 +377,7 @@ function BoardTable({ board }: BoardTableProps) {
                     </div>
                 ) : null}
             </DragOverlay>
-        </DndContext>
+        </DndContext >
     );
 }
 

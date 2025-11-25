@@ -43,6 +43,11 @@ export const cellsApi = {
 };
 
 export const groupsApi = {
+    create: (data: { name: string; boardId: string; color?: string }) =>
+        api.post<Group>('/groups', data).then((res) => res.data),
+
+    delete: (id: string) => api.delete(`/groups/${id}`),
+
     updatePosition: (id: string, data: { position: number }) =>
         api.patch<Group>(`/groups/${id}/position`, data).then((res) => res.data),
 };

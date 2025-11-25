@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { boardsApi } from './api/boardsApi';
 import BoardView from './components/BoardView';
+import Sidebar from './components/Sidebar';
 
 function App() {
     const [boardId, setBoardId] = useState<string | null>(null);
+    const [activeView, setActiveView] = useState<'board' | 'agenda' | 'calendar'>('board');
 
     // Get all boards
     const { data: boards } = useQuery({
@@ -29,35 +31,47 @@ function App() {
     }, [boards]);
 
     return (
-        <div className="app">
-            <header className="app-header">
-                <div className="app-header-content">
-                    <div className="app-logo">
-                        <div className="app-logo-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                                <path d="M12 2L2 7L12 12L22 7L12 2Z" />
-                                <path d="M2 17L12 22L22 17" opacity="0.7" />
-                                <path d="M2 12L12 17L22 12" opacity="0.4" />
-                            </svg>
-                        </div>
-                        <h1>Sunday</h1>
-                    </div>
-                    <div className="app-logo">
-                        <span className="text-muted">Work OS</span>
-                    </div>
-                </div>
-            </header>
+        <div className="app" style={{ display: 'flex' }}>
+            <Sidebar activeView={activeView} onViewChange={setActiveView} />
 
-            <main className="board-container">
-                {boardId ? (
-                    <BoardView boardId={boardId} />
-                ) : (
-                    <div className="loading-container">
-                        <div className="loading-spinner"></div>
-                        <p className="text-muted">Loading your board...</p>
+            <div className="main-content" style={{ marginLeft: '240px', flex: 1, width: 'calc(100% - 240px)' }}>
+                {activeView === 'board' && (
+                    <>
+                        <header className="app-header" style={{ left: '240px', width: 'calc(100% - 240px)' }}>
+                            <div className="app-header-content">
+                                <div className="app-logo">
+                                    <span className="text-muted">Work OS</span>
+                                </div>
+                            </div>
+                        </header>
+
+                        <main className="board-container" style={{ marginTop: '60px' }}>
+                            {boardId ? (
+                                <BoardView boardId={boardId} />
+                            ) : (
+                                <div className="loading-container">
+                                    <div className="loading-spinner"></div>
+                                    <p className="text-muted">Loading your board...</p>
+                                </div>
+                            )}
+                        </main>
+                    </>
+                )}
+
+                {activeView === 'agenda' && (
+                    <div style={{ padding: '2rem', color: 'var(--color-text-primary)' }}>
+                        <h1>Agenda View</h1>
+                        <p className="text-muted">Coming soon...</p>
                     </div>
                 )}
-            </main>
+
+                {activeView === 'calendar' && (
+                    <div style={{ padding: '2rem', color: 'var(--color-text-primary)' }}>
+                        <h1>Calendar View</h1>
+                        <p className="text-muted">Coming soon...</p>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

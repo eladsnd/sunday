@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Group } from '../entities/group.entity';
 import { UpdateGroupPositionDto } from './dto/update-group-position.dto';
+import { CreateGroupDto } from './dto/create-group.dto';
 
 @Injectable()
 export class GroupsService {
@@ -11,6 +12,34 @@ export class GroupsService {
         private groupsRepository: Repository<Group>,
         private dataSource: DataSource,
     ) { }
+
+    async create(createGroupDto: CreateGroupDto): Promise<Group> {
+        const { boardId } = createGroupDto;
+
+        // Get max position
+        const maxPosition = await this.groupsRepository
+            .createQueryBuilder('group')
+            .select('MAX(group.position)', 'max')
+            .where('group.boardId = :boardId', { boardId })
+            .getRawOne();
+
+        const group = this.groupsRepository.create({
+            ...createGroupDto,
+            position: (maxPosition?.max ?? -1) + 1,
+            color: createGroupDto.color || '#579bfc', // Default blue color
+        });
+
+        return this.groupsRepository.save(group);
+    }
+
+    async remove(id: string): Promise<void> {
+        const group = await this.groupsRepository.findOne({ where: { id } });
+        if (!group) {
+            throw new NotFoundException(`Group with ID ${id} not found`);
+        }
+
+        await this.groupsRepository.remove(group);
+    }
 
     async updatePosition(id: string, updateGroupPositionDto: UpdateGroupPositionDto) {
         const { position } = updateGroupPositionDto;
