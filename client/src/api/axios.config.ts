@@ -8,9 +8,18 @@ export const apiClient = axios.create({
     },
 });
 
+// Store interceptor ID so we can eject it later
+let requestInterceptorId: number | null = null;
+
 // Setup axios interceptor to add JWT token to all requests
 export const setupAxiosInterceptors = (token: string) => {
-    apiClient.interceptors.request.use((config) => {
+    // Eject previous interceptor if exists
+    if (requestInterceptorId !== null) {
+        apiClient.interceptors.request.eject(requestInterceptorId);
+    }
+
+    // Add new interceptor
+    requestInterceptorId = apiClient.interceptors.request.use((config) => {
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
