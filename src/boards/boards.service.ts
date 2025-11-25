@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from '../entities/board.entity';
@@ -24,14 +24,15 @@ export class BoardsService {
         private cellValueRepository: Repository<CellValue>,
     ) { }
 
-    async findAll(): Promise<Board[]> {
+    async findAll(userId: string): Promise<Board[]> {
         return this.boardRepository.find({
+            where: { ownerId: userId },
             select: ['id', 'name', 'description', 'createdAt', 'updatedAt'],
             order: { createdAt: 'DESC' },
         });
     }
 
-    async findOne(id: string): Promise<Board> {
+    async findOne(id: string, userId: string): Promise<Board> {
         const board = await this.boardRepository.findOne({
             where: { id },
             relations: ['groups', 'columns', 'items', 'items.cellValues'],
@@ -46,30 +47,38 @@ export class BoardsService {
             throw new NotFoundException(`Board with ID ${id} not found`);
         }
 
+        if (board.ownerId !== userId) {
+            throw new ForbiddenException('You do not have permission to access this board');
+        }
+
         return board;
     }
 
-    async create(createBoardDto: CreateBoardDto): Promise<Board> {
-        const board = this.boardRepository.create(createBoardDto);
+    async create(createBoardDto: CreateBoardDto, userId: string): Promise<Board> {
+        const board = this.boardRepository.create({
+            ...createBoardDto,
+            ownerId: userId,
+        });
         return this.boardRepository.save(board);
     }
 
-    async update(id: string, updateBoardDto: UpdateBoardDto): Promise<Board> {
-        const board = await this.findOne(id);
+    async update(id: string, updateBoardDto: UpdateBoardDto, userId: string): Promise<Board> {
+        const board = await this.findOne(id, userId);
         Object.assign(board, updateBoardDto);
         return this.boardRepository.save(board);
     }
 
-    async remove(id: string): Promise<void> {
-        const board = await this.findOne(id);
+    async remove(id: string, userId: string): Promise<void> {
+        const board = await this.findOne(id, userId);
         await this.boardRepository.remove(board);
     }
 
-    async seedJobSearchBoard(): Promise<Board> {
+    async seedJobSearchBoard(userId: string): Promise<Board> {
         // Create board
         const board = this.boardRepository.create({
             name: 'Main Board',
             description: 'Organize and track your work in one place',
+            ownerId: userId,
         });
         await this.boardRepository.save(board);
 
@@ -271,6 +280,6 @@ export class BoardsService {
             }
         }
 
-        return this.findOne(board.id);
+        return this.findOne(board.id, userId);
     }
 }
