@@ -7,12 +7,14 @@ import { CellsModule } from './cells/cells.module';
 import { GroupsModule } from './groups/groups.module';
 import { AutomationsModule } from './automations/automations.module';
 import { ColumnsModule } from './columns/columns.module';
+import { AuthModule } from './auth/auth.module';
 import { Board } from './entities/board.entity';
 import { Group } from './entities/group.entity';
 import { Item } from './entities/item.entity';
 import { BoardColumn } from './entities/column.entity';
 import { CellValue } from './entities/cell-value.entity';
 import { Automation } from './entities/automation.entity';
+import { User } from './entities/user.entity';
 
 @Module({
     imports: [
@@ -26,10 +28,11 @@ import { Automation } from './entities/automation.entity';
             username: process.env.DB_USERNAME || 'sunday',
             password: process.env.DB_PASSWORD || 'sunday123',
             database: process.env.DB_DATABASE || 'sunday_db',
-            entities: [Board, Group, Item, BoardColumn, CellValue, Automation],
+            entities: [Board, Group, Item, BoardColumn, CellValue, Automation, User],
             synchronize: process.env.NODE_ENV !== 'production', // Auto-sync in dev only
             logging: process.env.NODE_ENV === 'development',
         }),
+        AuthModule,
         BoardsModule,
         ItemsModule,
         CellsModule,

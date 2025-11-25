@@ -1,4 +1,4 @@
-
+import { useAuth } from '../context/AuthContext';
 
 interface SidebarProps {
     activeView: 'board' | 'agenda' | 'calendar';
@@ -6,6 +6,7 @@ interface SidebarProps {
 }
 
 function Sidebar({ activeView, onViewChange }: SidebarProps) {
+    const { user, logout } = useAuth();
     return (
         <div className="sidebar" style={{
             width: '240px',
@@ -104,6 +105,54 @@ function Sidebar({ activeView, onViewChange }: SidebarProps) {
                     Calendar
                 </button>
             </nav>
+
+            <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }}>
+                {user && (
+                    <div style={{
+                        padding: '0.75rem',
+                        backgroundColor: 'rgba(108, 99, 255, 0.05)',
+                        borderRadius: 'var(--radius-md)',
+                        marginBottom: '0.5rem'
+                    }}>
+                        <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-text)' }}>
+                            {user.firstName} {user.lastName}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
+                            {user.email}
+                        </div>
+                        {user.role === 'admin' && (
+                            <div style={{
+                                fontSize: '0.7rem',
+                                color: 'var(--color-primary)',
+                                marginTop: '0.25rem',
+                                fontWeight: 600
+                            }}>
+                                Administrator
+                            </div>
+                        )}
+                    </div>
+                )}
+                <button
+                    onClick={logout}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: '100%',
+                        padding: '0.75rem 1rem',
+                        border: '1px solid var(--color-border)',
+                        background: 'transparent',
+                        color: 'var(--color-text-secondary)',
+                        borderRadius: 'var(--radius-md)',
+                        cursor: 'pointer',
+                        fontSize: '0.95rem',
+                        fontWeight: 500,
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    <span style={{ marginRight: '0.75rem' }}>🚪</span>
+                    Logout
+                </button>
+            </div>
         </div>
     );
 }
