@@ -123,7 +123,7 @@ describe('GroupsService', () => {
             const mockGroup = {
                 id: 'group-1',
                 ...createGroupDto,
-                color: '#579bfc',
+                color: '#3b9eff',
                 position: 0,
             };
 

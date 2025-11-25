@@ -36,7 +36,7 @@ function StatusCell({ value, settings, itemId, columnId, boardId }: StatusCellPr
                     value={currentStatus}
                     onChange={handleChange}
                     style={{
-                        backgroundColor: currentOption?.color || '#6c63ff',
+                        backgroundColor: currentOption?.color || '#3b9eff',
                         color: 'white',
                         fontWeight: 600,
                         border: 'none',

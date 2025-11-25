@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #3b9eff 0%, #2689e6 50%, #64d8ff 100%);
     padding: 20px;
 }
 
@@ -73,8 +73,8 @@
 
 .form-group input:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #3b9eff;
+    box-shadow: 0 0 0 3px rgba(59, 158, 255, 0.15);
 }
 
 .form-group input:disabled {
@@ -98,7 +98,7 @@
     font-size: 16px;
     font-weight: 600;
     color: white;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #3b9eff 0%, #2689e6 100%);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -107,7 +107,7 @@
 
 .auth-button:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 8px 20px rgba(59, 158, 255, 0.5);
 }
 
 .auth-button:disabled {
@@ -174,7 +174,7 @@
 }
 
 .auth-footer a {
-    color: #667eea;
+    color: #3b9eff;
     text-decoration: none;
     font-weight: 600;
 }
@@ -188,7 +188,7 @@
     padding: 16px;
     background-color: #f7fafc;
     border-radius: 8px;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #3b9eff;
 }
 
 .auth-admin-info p {
@@ -203,7 +203,7 @@
 
 .loading-spinner {
     border: 3px solid #f3f3f3;
-    border-top: 3px solid #667eea;
+    border-top: 3px solid #3b9eff;
     border-radius: 50%;
     width: 40px;
     height: 40px;

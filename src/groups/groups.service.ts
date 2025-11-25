@@ -26,7 +26,7 @@ export class GroupsService {
         const group = this.groupsRepository.create({
             ...createGroupDto,
             position: (maxPosition?.max ?? -1) + 1,
-            color: createGroupDto.color || '#579bfc', // Default blue color
+            color: createGroupDto.color || '#3b9eff', // Default sky blue color
         });
 
         return this.groupsRepository.save(group);

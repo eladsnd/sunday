@@ -102,13 +102,13 @@ export class BoardsService {
                 position: 2,
                 settings: {
                     options: [
-                        { label: 'Applied', color: '#579BFC' },
-                        { label: 'Phone Screen', color: '#A25DDC' },
-                        { label: 'Interview', color: '#FDAB3D' },
-                        { label: 'Offer', color: '#00C875' },
-                        { label: 'Accepted', color: '#037F4C' },
-                        { label: 'Rejected', color: '#E44258' },
-                        { label: 'Withdrawn', color: '#C4C4C4' },
+                        { label: 'Applied', color: '#3b9eff' },
+                        { label: 'Phone Screen', color: '#64d8ff' },
+                        { label: 'Interview', color: '#ffc93c' },
+                        { label: 'Offer', color: '#4ecdc4' },
+                        { label: 'Accepted', color: '#2eb398' },
+                        { label: 'Rejected', color: '#ff6b9d' },
+                        { label: 'Withdrawn', color: '#8fb5db' },
                     ],
                 },
             },
@@ -130,9 +130,9 @@ export class BoardsService {
                 position: 5,
                 settings: {
                     options: [
-                        { label: 'High', color: '#E44258' },
-                        { label: 'Medium', color: '#FDAB3D' },
-                        { label: 'Low', color: '#579BFC' },
+                        { label: 'High', color: '#ff6b9d' },
+                        { label: 'Medium', color: '#ffc93c' },
+                        { label: 'Low', color: '#64d8ff' },
                     ],
                 },
             },
@@ -175,21 +175,21 @@ export class BoardsService {
         const activeGroup = await this.groupRepository.save({
             name: 'Active Applications',
             position: 0,
-            color: '#6C63FF',
+            color: '#3b9eff',
             boardId: board.id,
         });
 
         const followUpGroup = await this.groupRepository.save({
             name: 'Follow Up',
             position: 1,
-            color: '#FDAB3D',
+            color: '#ffc93c',
             boardId: board.id,
         });
 
         const closedGroup = await this.groupRepository.save({
             name: 'Closed',
             position: 2,
-            color: '#C4C4C4',
+            color: '#8fb5db',
             boardId: board.id,
         });
 

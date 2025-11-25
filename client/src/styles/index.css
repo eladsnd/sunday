@@ -1,51 +1,51 @@
 :root {
-    /* Colors - Premium Dark Theme */
-    --color-bg-primary: #1a1d2e;
-    --color-bg-secondary: #22273d;
-    --color-bg-tertiary: #2a3049;
-    --color-bg-hover: #323754;
-    --color-bg-elevated: #2d3350;
+    /* Colors - Clear Blue Sky Theme */
+    --color-bg-primary: #0a1628;
+    --color-bg-secondary: #132337;
+    --color-bg-tertiary: #1a2f47;
+    --color-bg-hover: #243b56;
+    --color-bg-elevated: #1e3550;
 
-    /* Accent Colors - Vibrant */
-    --color-primary: #6c63ff;
-    --color-primary-light: #8a84ff;
-    --color-primary-dark: #5449d4;
-    --color-secondary: #00d9ff;
-    --color-success: #00c875;
-    --color-warning: #fdab3d;
-    --color-error: #e44258;
+    /* Accent Colors - Sky Blue Palette */
+    --color-primary: #3b9eff;
+    --color-primary-light: #5db3ff;
+    --color-primary-dark: #2689e6;
+    --color-secondary: #64d8ff;
+    --color-success: #4ecdc4;
+    --color-warning: #ffc93c;
+    --color-error: #ff6b9d;
 
     /* Text Colors */
-    --color-text-primary: #f8f9fa;
-    --color-text-secondary: #c4c7d2;
-    --color-text-tertiary: #9499ab;
-    --color-text-disabled: #6b7280;
+    --color-text-primary: #f0f7ff;
+    --color-text-secondary: #c8dff8;
+    --color-text-tertiary: #8fb5db;
+    --color-text-disabled: #6b8bab;
 
     /* Borders */
-    --color-border: #383e5a;
-    --color-border-light: #4a5170;
+    --color-border: #2a4663;
+    --color-border-light: #3d5f82;
 
     /* Status Colors */
-    --status-applied: #579bfc;
-    --status-phone: #a25ddc;
-    --status-interview: #fdab3d;
-    --status-offer: #00c875;
-    --status-accepted: #037f4c;
-    --status-rejected: #e44258;
-    --status-withdrawn: #c4c4c4;
+    --status-applied: #3b9eff;
+    --status-phone: #64d8ff;
+    --status-interview: #ffc93c;
+    --status-offer: #4ecdc4;
+    --status-accepted: #2eb398;
+    --status-rejected: #ff6b9d;
+    --status-withdrawn: #8fb5db;
 
     /* Priority Colors */
-    --priority-high: #e44258;
-    --priority-medium: #fdab3d;
-    --priority-low: #579bfc;
+    --priority-high: #ff6b9d;
+    --priority-medium: #ffc93c;
+    --priority-low: #64d8ff;
 
     /* Shadows & Glow */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
-    --glow-primary: 0 0 20px rgba(108, 99, 255, 0.4);
-    --glow-secondary: 0 0 15px rgba(0, 217, 255, 0.3);
+    --glow-primary: 0 0 20px rgba(59, 158, 255, 0.5);
+    --glow-secondary: 0 0 15px rgba(100, 216, 255, 0.4);
 
     /* Spacing */
     --spacing-xs: 0.25rem;
@@ -85,7 +85,7 @@
 
 body {
     font-family: var(--font-family);
-    background: linear-gradient(135deg, #1a1d2e 0%, #22273d 100%);
+    background: linear-gradient(135deg, #0a1628 0%, #1a2f47 50%, #132337 100%);
     color: var(--color-text-primary);
     line-height: 1.6;
     letter-spacing: -0.01em;
@@ -181,7 +181,7 @@ body {
     }
 
     50% {
-        box-shadow: 0 0 30px rgba(108, 99, 255, 0.6);
+        box-shadow: 0 0 30px rgba(59, 158, 255, 0.8);
     }
 }
 
@@ -486,7 +486,7 @@ input[type="date"]:focus,
 textarea:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(59, 158, 255, 0.2);
 }
 
 /* Select Dropdown */

@@ -20,7 +20,7 @@ export class Group {
     @Column({ type: 'int', default: 0 })
     position: number;
 
-    @Column({ type: 'varchar', default: '#6C63FF' })
+    @Column({ type: 'varchar', default: '#3b9eff' })
     color: string;
 
     @Column({ name: 'board_id' })
