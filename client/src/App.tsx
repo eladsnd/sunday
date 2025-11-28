@@ -13,13 +13,14 @@ function App() {
     const [boardId, setBoardId] = useState<string | null>(null);
     const [activeView, setActiveView] = useState<'board' | 'agenda' | 'calendar'>('board');
 
-    // Get all boards
+    // Get all boards (only when authenticated)
     const { data: boards } = useQuery({
         queryKey: ['boards'],
         queryFn: async () => {
             const response = await boardsApi.getAll();
             return response.data;
         },
+        enabled: isAuthenticated && !isLoading,
     });
 
     // Auto-select first board or seed if no boards exist

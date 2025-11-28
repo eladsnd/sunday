@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { authApi, setupAxiosInterceptors } from '../api/authApi';
+import { authApi, setupAxiosInterceptors, clearAxiosInterceptors } from '../api/authApi';
 
 interface User {
     id: string;
@@ -36,6 +36,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setToken(storedToken);
             setUser(JSON.parse(storedUser));
             setupAxiosInterceptors(storedToken);
+        } else {
+            // Clear any existing interceptors if no token
+            clearAxiosInterceptors();
         }
 
         setIsLoading(false);
@@ -72,6 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(null);
         localStorage.removeItem('authToken');
         localStorage.removeItem('authUser');
+        clearAxiosInterceptors();
     };
 
     return (

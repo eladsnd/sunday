@@ -38,12 +38,5 @@ export const authApi = {
     },
 };
 
-// Axios interceptor to add JWT token to requests
-export const setupAxiosInterceptors = (token: string) => {
-    axios.interceptors.request.use((config) => {
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    });
-};
+// Export axios interceptor functions from axios.config.ts
+export { setupAxiosInterceptors, clearAxiosInterceptors } from './axios.config';
